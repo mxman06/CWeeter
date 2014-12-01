@@ -1,0 +1,17 @@
+ul {
+    display: inline-block;
+    text-align: center;
+}
+
+body {
+    margin:50px 0; padding:0;
+    text-align:center;
+}
+
+.tweet {
+    padding: 50px;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    background: #f2f2f2;
+}
