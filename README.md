@@ -33,5 +33,5 @@ Mini project that me and @Tumeconnais had to do for during our second Master deg
   
   -We didn't take in account the "group" thing that was asked by the teacher, we forgot to include this feature in this project because we were to focus to fork the real simple Twitter system which is to following/be fllowed other users.
   
-  -We use an H2 DB
+  -We used an H2 DB
   
