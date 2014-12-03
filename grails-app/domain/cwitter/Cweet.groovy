@@ -6,7 +6,7 @@ class Cweet {
 
     String message
     Date publicationDate
-    static belongsTo = User
+    static belongsTo = [user : User]
 
     static constraints = {
         message (size:3..140, nullable: false, blank: false)

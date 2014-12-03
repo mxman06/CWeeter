@@ -17,9 +17,10 @@
             <form class="navbar-form navbar-right" role="search">
                 <div class="form-group">
 
-                    <input id="test" onsubmit=";" name="usernameSearched" list="usersDL" type="text" class="form-control"
+                    <input id="test" onsubmit=";" name="usernameSearched" list="usersDL" type="text"
+                           class="form-control"
                            placeholder="Search">
-                    <datalist id="usersDL" >
+                    <datalist id="usersDL">
                         <g:each in="${cwitter.User.list()}">
                             <option value="${it.username}" id="${it.id}" onclick="callUrl()" >
                         </g:each>
@@ -52,7 +53,7 @@
         </div>
 
         <div class="col col-lg-6">
-            <h1>Your Cweets</h1>
+            <h1>Your Timeline</h1>
         </div>
 
         <div class="col col-lg-3">
@@ -92,7 +93,16 @@
 
             <div id="cweet" class="col-sm-12 col-md-12 col-lg-12">
                 <g:each in="${cweetsList}" var="cweetInstance">
-                    <p class="tweet">${cweetInstance.message}</p>
+                    <div class="tweet">
+                        <p>
+                    <g:link controller="user" action="show"
+                            id="${cweetInstance.user.id}"><li
+                            class="list-group-item">${cweetInstance.user.username}</li></g:link> <br/>
+                    ${cweetInstance.message} <br/>
+
+                    ${cweetInstance.publicationDate}
+                    </p>
+                </div>
                 </g:each>
             </div>
 
@@ -126,18 +136,18 @@
         if (code == 32 || code == 13 || code == 188 || code == 186) {
             console.log($("#test").val());
 
-          /*  $.post("localhost:8080/Cwitter/cweet/search", $("#test").val()).success(function(){
-                console.log('success');
-            });*/
+            /*  $.post("localhost:8080/Cwitter/cweet/search", $("#test").val()).success(function(){
+             console.log('success');
+             });*/
 
         } // missing closing if brace
-       // console.log($("#test").val());
+        // console.log($("#test").val());
     });
 
 
-   /* var callUrl = function () {
-        console.log("call url");
-    }*/
+    /* var callUrl = function () {
+     console.log("call url");
+     }*/
 </script>
 
 </body>

@@ -10,13 +10,66 @@ import grails.transaction.Transactional
 class UserController {
 
     static allowedMethods = [login: "POST", show: "GET", register: "POST"]
-
     def show(User userInstance) {
+        ArrayList<Cweet> cweetTrie;
+        cweetTrie = userInstance.cweets;
+        cweetTrie.sort { it.publicationDate }
+        cweetTrie = cweetTrie.reverse();
 
-        [cweetsList: userInstance.cweets + userInstance.followers.cweets + userInstance.follows.cweets,
-         followersList: userInstance.followers,
-         followingList: userInstance.follows]
+        if (session.user) {
+            User userInstanceLogged = User.get(session.user)
+            println("hey" +params)
+            println(userInstanceLogged.id)
+            User uCurrent = User.findById(params.id);
+            ArrayList<User> follower = uCurrent.getFollowers()
+            Boolean fol = follower.contains(userInstanceLogged);
+
+
+                [isFollowing   : fol,
+                 cweetsListUser: cweetTrie,
+                 followersList : userInstance.followers,
+                 followingList : userInstance.follows,
+                 theUsername   : userInstance.username,
+                    user:userInstance]
+
+
+
+        }
     }
+    def unfollow(User userInstance) {
+        if (session.user) {
+            User userInstanceLogged = User.get(session.user);
+            def u = User.findByUsername(params.id);
+            userInstanceLogged.removeFromFollows(u).save(flush:true)
+            u.removeFromFollowers(userInstanceLogged).save(flush:true)
+
+            // params.id.save()
+            redirect(uri: "/user/show/" + u.id)
+        } else {
+            println('pas bon')
+            redirect(uri: "/")
+        }
+    }
+
+
+    def follow(User userInstance) {
+
+        if (session.user) {
+            User userInstanceLogged = User.get(session.user);
+            def u = User.findByUsername(params.id);
+            userInstanceLogged.addToFollows(u).save(flush:true)
+            u.addToFollowers(userInstanceLogged).save(flush:true)
+            for(User us :u.followers){
+                println("follower " + us)
+            }
+           // params.id.save()
+            redirect(uri: "/user/show/" + u.id)
+        } else {
+            println('pas bon')
+            redirect(uri: "/")
+        }
+    }
+
 
     def register() {
         println(params)
@@ -39,8 +92,7 @@ class UserController {
             }
 
 
-        }
-        else{
+        } else {
             redirect(uri: "/")
         }
     }
@@ -59,8 +111,7 @@ class UserController {
                 session["user"] = userInstance.id
                 redirect(controller: "cweet")
 
-            }
-            else{
+            } else {
                 redirect(uri: "/")
             }
 

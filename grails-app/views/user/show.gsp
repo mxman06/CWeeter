@@ -17,9 +17,10 @@
             <form class="navbar-form navbar-right" role="search">
                 <div class="form-group">
 
-                    <input id="test" onsubmit=";" name="usernameSearched" list="usersDL" type="text" class="form-control"
+                    <input id="test" onsubmit=";" name="usernameSearched" list="usersDL" type="text"
+                           class="form-control"
                            placeholder="Search">
-                    <datalist id="usersDL" >
+                    <datalist id="usersDL">
                         <g:each in="${cwitter.User.list()}">
                             <option value="${it.username}" id="${it.id}" onclick="callUrl()" >
                         </g:each>
@@ -47,12 +48,33 @@
 <body>
 <div class="container">
     <div class="row">
+
+        <g:if test="${!isFollowing}">
+            <div class="col col-lg-6">
+                <g:link controller="user" action="follow" id="${user.username}">
+                    <div class="btn btn-danger">follow</div>
+                </g:link>
+            </div>
+        </g:if>
+        <g:else test="${isFollowing}">
+            <div class="col col-lg-6">
+
+                <g:link controller="user" action="unfollow" id="${user.username}">
+
+                    <div class="btn btn-danger">unfollow</div>
+                </g:link>
+
+            </div>
+        </g:else>
+    </div>
+
+    <div class="row">
         <div class="col col-lg-3">
             <h1>Followers</h1>
         </div>
 
         <div class="col col-lg-6">
-            <h1>${Theusername}'s cweets</h1>
+            <h1>${theUsername}'s cweets</h1>
         </div>
 
         <div class="col col-lg-3">
@@ -76,8 +98,13 @@
         <div class="col col-lg-6">
 
             <div id="cweet" class="col-sm-12 col-md-12 col-lg-12">
-                <g:each in="${cweetsList}" var="cweetInstance">
-                    <p class="tweet">${cweetInstance.message}</p>
+                <g:each in="${cweetsListUser}" var="cweetInstance">
+                    <g:link controller="user" action="show"
+                            id="${cweetInstance.user.id}"><li
+                            class="list-group-item">${cweetInstance.user.username}</li></g:link> <br/>
+                    ${cweetInstance.message} <br/>
+
+                    ${cweetInstance.publicationDate}
                 </g:each>
             </div>
 

@@ -9,28 +9,35 @@ import grails.transaction.Transactional
 @Transactional(readOnly = true)
 class CweetController {
 
-    static allowedMethods = [sendCweet: "POST", seeUser: "GET", search:"GET"]
+    static allowedMethods = [sendCweet: "POST", seeUser: "GET", search: "GET"]
 
     //on declare linstance du user
     User userInstance
 
     def index() {
+        ArrayList<Cweet> cweetTrie;
 
         //uniquement si on trouve la session
         if (session.user) {
             userInstance = User.get(session.user)
-        }
-        else{
+            cweetTrie = userInstance.cweets +userInstance.follows.cweets;
+
+
+            cweetTrie.sort{it.publicationDate }
+            cweetTrie= cweetTrie.reverse();
+        } else {
             println('pas bon')
-           redirect(uri:"/")
+            redirect(uri: "/")
         }
 
         //envoi les variables variable a la vue
-        [cweetsList: userInstance.cweets + userInstance.followers.cweets + userInstance.follows.cweets,
+
+        [cweetsList: cweetTrie,
          followersList: userInstance.followers,
          followingList: userInstance.follows,
          Theusername: userInstance.username]
     }
+
 
     def sendCweet() {
 
@@ -49,16 +56,22 @@ class CweetController {
             String cweet = params.cweet
 
             //on créer le cweet et on le lattribut a luser instance
-            Cweet cweetInstance = new Cweet(message: cweet, publicationDate: new Date()).save(failOnError: true).save(flush: true)
+            Cweet cweetInstance = new Cweet(message: cweet, publicationDate: new Date(), user: userInstance).save(failOnError: true).save(flush: true)
             userInstance.addToCweets(cweetInstance).save(flush: true)
+            ArrayList<Cweet> cweeTrie;
+            cweeTrie = userInstance.cweets  + userInstance.follows.cweets;
 
+
+            cweeTrie.sort{it.publicationDate }
+            cweeTrie= cweeTrie.reverse();
             //on rafraichi la vue
             //envoi les variables variable a la vue
             println(userInstance.cweets)
-            render(view: "index", model:[cweetsList: userInstance.cweets + userInstance.followers.cweets + userInstance.follows.cweets,
+            render(view: "index", model:[cweetsList: cweeTrie,
                                          followersList: userInstance.followers,
                                          followingList: userInstance.follows])
 
+            redirect(controller:"cweet")
 
         }
     }
