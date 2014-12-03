@@ -15,20 +15,21 @@ class BootStrap {
 
         Cweet c2 = new Cweet(message: "je mpe sens bien ajourdhui", publicationDate: new Date(), user:u2).save(failOnError: true, flush: true)
 
-        Cweet c3 = new Cweet(message: "puuitttin jai la rage", publicationDate: new Date(), user:u3).save(failOnError: true)
+        Cweet c3 = new Cweet(message: "puuitttin jai la rage", publicationDate: new Date(), user:u3).save(failOnError: true, flush: true)
 
-        Cweet c4 = new Cweet(message: "je suis zen", publicationDate: new Date(), user:u4).save(failOnError: true)
+        Cweet c4 = new Cweet(message: "je suis zen", publicationDate: new Date(), user:u4).save(failOnError: true, flush: true)
 
-        Cweet c5 = new Cweet(message: "hahahahaha", publicationDate: new Date(), user:u5).save(failOnError: true)
+        Cweet c5 = new Cweet(message: "hahahahaha", publicationDate: new Date(), user:u5).save(failOnError: true, flush: true)
 
-        Cweet c6 = new Cweet(message: "hihihihi", publicationDate: new Date(), user:u6).save(failOnError: true)
+        Cweet c6 = new Cweet(message: "hihihihi", publicationDate: new Date(), user:u6).save(failOnError: true, flush: true)
 
-        Cweet c1 = new Cweet(message: "coucu ca va ?", publicationDate: new Date(), user: u1).save(failOnError: true)
+        Cweet c1 = new Cweet(message: "coucu ca va ?", publicationDate: new Date(), user: u1).save(failOnError: true, flush: true)
         u1.addToFollows(u5)
         u1.addToFollows(u2)
         u1.addToFollows(u3)
         u1.addToFollows(u4)
-     u5.addToFollowers(u1)
+
+        u5.addToFollowers(u1)
         u2.addToFollowers(u1)
         u3.addToFollowers(u1)
         u4.addToFollowers(u1)

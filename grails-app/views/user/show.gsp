@@ -11,7 +11,7 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
 
-                <a class="navbar-brand" href="tweet.html">Cweeter</a>
+                <a class="navbar-brand">Cweeter</a>
             </div>
 
             <form class="navbar-form navbar-right" role="search">
@@ -33,7 +33,9 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="cweet.html">Cweet<span class="sr-only">(current)</span></a></li>
+                    <li class="active"><a href="../../cweet">Cweet<span class="sr-only">(current)</span></a></li>
+                    <li><a href="../followers">Followers<span class="sr-only">(current)</span></a></li>
+                    <li><a href="../followings">Followings<span class="sr-only">(current)</span></a></li>
 
                 </ul>
 

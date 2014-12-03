@@ -15,27 +15,48 @@ class CweetController {
     User userInstance
 
     def index() {
-        ArrayList<Cweet> cweetTrie;
+        ArrayList<Cweet> cweetTrie = new ArrayList<Cweet>();
 
         //uniquement si on trouve la session
         if (session.user) {
             userInstance = User.get(session.user)
-            cweetTrie = userInstance.cweets +userInstance.follows.cweets;
+
+            //get cweets of the current user
+            for (Cweet c in userInstance.cweets) {
+                println(c)
+                println(userInstance.cweets)
+
+                cweetTrie.add(c)
+            }
+
+            //get cweets to the the user's follows
+            userInstance.follows.each {
+                User followInstance ->
+                    followInstance.cweets.each
+                            {
+                                Cweet followCweetInstance ->
+                                    cweetTrie.add(followCweetInstance)
+                            }
+            }
 
 
-            cweetTrie.sort{it.publicationDate }
-            cweetTrie= cweetTrie.reverse();
-        } else {
+
+            cweetTrie.sort { it.publicationDate }
+            cweetTrie = cweetTrie.reverse();
+        }
+
+        else {
             println('pas bon')
             redirect(uri: "/")
         }
 
+        println(cweetTrie)
         //envoi les variables variable a la vue
 
-        [cweetsList: cweetTrie,
+        [cweetsList   : cweetTrie,
          followersList: userInstance.followers,
          followingList: userInstance.follows,
-         Theusername: userInstance.username]
+         Theusername  : userInstance.username]
     }
 
 
@@ -44,9 +65,8 @@ class CweetController {
         //uniquement si on trouve la session
         if (session.user) {
             userInstance = User.get(session.user)
-        }
-        else{
-            redirect(controller:"cweet")
+        } else {
+            redirect(controller: "cweet")
         }
 
         println(params.cweet)
@@ -59,38 +79,37 @@ class CweetController {
             Cweet cweetInstance = new Cweet(message: cweet, publicationDate: new Date(), user: userInstance).save(failOnError: true).save(flush: true)
             userInstance.addToCweets(cweetInstance).save(flush: true)
             ArrayList<Cweet> cweeTrie;
-            cweeTrie = userInstance.cweets  + userInstance.follows.cweets;
+            cweeTrie = userInstance.cweets + userInstance.follows.cweets;
 
 
-            cweeTrie.sort{it.publicationDate }
-            cweeTrie= cweeTrie.reverse();
+            cweeTrie.sort { it.publicationDate }
+            cweeTrie = cweeTrie.reverse();
             //on rafraichi la vue
             //envoi les variables variable a la vue
             println(userInstance.cweets)
-            render(view: "index", model:[cweetsList: cweeTrie,
-                                         followersList: userInstance.followers,
-                                         followingList: userInstance.follows])
+            render(view: "index", model: [cweetsList   : cweeTrie,
+                                          followersList: userInstance.followers,
+                                          followingList: userInstance.follows])
 
-            redirect(controller:"cweet")
+            redirect(controller: "cweet")
 
         }
     }
 
-    def seeUser(){
+    def seeUser() {
         //uniquement si on trouve la session
         if (session.user) {
             userInstance = User.get(session.user)
-            redirect(controller: "user" ,action: "show", id:params.id )
-        }
-        else{
+            redirect(controller: "user", action: "show", id: params.id)
+        } else {
             redirect(controller: "user")
         }
 
     }
 
-    def logOff(){
+    def logOff() {
         session["user"] = null;
-        redirect(uri:"/")
+        redirect(uri: "/")
     }
 
 
